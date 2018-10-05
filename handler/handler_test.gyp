@@ -22,16 +22,16 @@
       'type': 'executable',
       'dependencies': [
         'crashpad_handler_test_extended_handler',
-        'handler.gyp:crashpad_handler_lib',
-        '../client/client.gyp:crashpad_client',
-        '../compat/compat.gyp:crashpad_compat',
-        '../snapshot/snapshot.gyp:crashpad_snapshot',
-        '../snapshot/snapshot_test.gyp:crashpad_snapshot_test_lib',
-        '../test/test.gyp:crashpad_googletest_main',
-        '../test/test.gyp:crashpad_test',
+        'handler.gyp:handler',
+        '../client/client.gyp:client',
+        '../compat/compat.gyp:compat',
+        '../snapshot/snapshot.gyp:snapshot',
+        '../snapshot/snapshot_test.gyp:snapshot_test',
+        '../test/test.gyp:googletest_main',
+        '../test/test.gyp:test',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
@@ -63,11 +63,11 @@
       'target_name': 'crashpad_handler_test_extended_handler',
       'type': 'executable',
       'dependencies': [
-        '../compat/compat.gyp:crashpad_compat',
-        '../minidump/minidump_test.gyp:crashpad_minidump_test_lib',
+        '../compat/compat.gyp:compat',
+        '../minidump/minidump_test.gyp:minidump_test',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../tools/tools.gyp:crashpad_tool_support',
-        'handler.gyp:crashpad_handler_lib',
+        '../tools/tools.gyp:tool_support',
+        'handler.gyp:handler',
       ],
       'include_dirs': [
         '..',
@@ -84,11 +84,11 @@
           'target_name': 'crash_other_program',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
-            '../test/test.gyp:crashpad_test',
+            '../client/client.gyp:client',
+            '../test/test.gyp:test',
             '../third_party/googletest/googletest.gyp:googletest',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'sources': [
             'win/crash_other_program.cc',
@@ -98,9 +98,9 @@
           'target_name': 'crashy_program',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
+            '../client/client.gyp:client',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'include_dirs': [
             '..',
@@ -113,7 +113,7 @@
           'target_name': 'crashy_signal',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
+            '../client/client.gyp:client',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
           ],
           'include_dirs': [
@@ -134,7 +134,7 @@
           'target_name': 'hanging_program',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
+            '../client/client.gyp:client',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
           ],
           'sources': [
@@ -155,11 +155,11 @@
           'target_name': 'self_destroying_program',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
-            '../compat/compat.gyp:crashpad_compat',
-            '../snapshot/snapshot.gyp:crashpad_snapshot',
+            '../client/client.gyp:client',
+            '../compat/compat.gyp:compat',
+            '../snapshot/snapshot.gyp:snapshot',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'include_dirs': [
             '..',
@@ -177,8 +177,8 @@
               'target_name': 'crashy_z7_loader',
               'type': 'executable',
               'dependencies': [
-                '../client/client.gyp:crashpad_client',
-                '../test/test.gyp:crashpad_test',
+                '../client/client.gyp:client',
+                '../test/test.gyp:test',
                 '../third_party/mini_chromium/mini_chromium.gyp:base',
               ],
               'include_dirs': [

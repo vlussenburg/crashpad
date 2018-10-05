@@ -21,6 +21,7 @@
 #include <atomic>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 #include "base/macros.h"
 #include "util/file/file_io.h"
@@ -94,6 +95,23 @@ class ExceptionHandlerServer {
         VMAddress requesting_thread_stack_address = 0,
         pid_t* requesting_thread_id = nullptr,
         UUID* local_report_id = nullptr) = 0;
+
+    //! \brief Called on receipt of a crash dump request from a client.
+    //!        Also gererate a backtrace dump file by forking another tracer.
+    //!
+    //! \param[in] tracer_pathname The pathname of the tracer executable.
+    //! \param[in] tracer_args Arguments for the tracer in "--opt=val" format.
+    //! \param[in] client_process_id The process ID of the crashing client.
+    //! \param[in] info Information on the client.
+    //! \param[out] local_report_id The unique identifier for the report created
+    //!     in the local report database. Optional.
+    //! \return `true` on success. `false` on failure with a message logged.
+    virtual bool HandleExceptionWithAdditionalTracer(
+        const base::FilePath& tracer_pathname,
+        std::vector<std::string>& tracer_args,
+        pid_t client_process_id,
+        const ExceptionHandlerProtocol::ClientInformation& info,
+        UUID* local_report_id = nullptr) { return false; }
 
     //! \brief Called on the receipt of a crash dump request from a client for a
     //!     crash that should be mediated by a PtraceBroker.

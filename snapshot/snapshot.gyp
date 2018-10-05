@@ -18,13 +18,14 @@
   ],
   'targets': [
     {
-      'target_name': 'crashpad_snapshot',
+      'target_name': 'snapshot',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
-        '../client/client.gyp:crashpad_client',
-        '../compat/compat.gyp:crashpad_compat',
+        '../client/client.gyp:client',
+        '../compat/compat.gyp:compat',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',

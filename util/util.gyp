@@ -18,10 +18,11 @@
   ],
   'targets': [
     {
-      'target_name': 'crashpad_util',
+      'target_name': 'util',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
-        '../compat/compat.gyp:crashpad_compat',
+        '../compat/compat.gyp:compat',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
         '../third_party/zlib/zlib.gyp:zlib',
         '../third_party/lss/lss.gyp:lss',
@@ -29,6 +30,7 @@
       'defines': [ 'ZLIB_CONST' ],
       'include_dirs': [
         '..',
+        '<!(pwd)/../../../openssl/include',
         '<(INTERMEDIATE_DIR)',
       ],
       'sources': [
@@ -310,6 +312,8 @@
         'win/session_end_watcher.h',
         'win/termination_codes.h',
         'win/xp_compat.h',
+        'roblox/user_callback_functions.cc',
+        'roblox/user_callback_functions.h',
       ],
       'conditions': [
         ['OS=="mac"', {
@@ -429,6 +433,21 @@
             'misc/capture_context_linux.S',
           ],
         }],
+        ['OS=="android"', {
+          'defines' : [
+            'CRASHPAD_USE_BORINGSSL',
+          ],
+          'link_settings': {
+            # Roblox specific location of openssl, need rerun build/gyp_crashpad_android.py
+            # to generate makefiles when switch between building 32-bit and 64-bit for ARM.
+            'libraries': [
+              #'<!(pwd)/../../../openssl/android/arm/lib/libssl.a',
+              #'<!(pwd)/../../../openssl/android/arm/lib/libcrypto.a',
+              '<!(pwd)/../../../openssl/android/arm64/lib/libssl.a',
+              '<!(pwd)/../../../openssl/android/arm64/lib/libcrypto.a',
+            ],
+          },
+        }],
         ['OS!="linux" and OS!="android"', {
           'sources/': [
             ['exclude', '^process/'],
@@ -437,6 +456,9 @@
       ],
       'target_conditions': [
         ['OS=="android"', {
+          'sources' : [
+            'net/http_transport_socket.cc',
+          ],
           'sources/': [
             ['include', '^linux/'],
             ['include', '^misc/capture_context_linux\\.S$'],

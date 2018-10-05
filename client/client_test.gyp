@@ -21,16 +21,16 @@
       'target_name': 'crashpad_client_test',
       'type': 'executable',
       'dependencies': [
-        'client.gyp:crashpad_client',
-        '../compat/compat.gyp:crashpad_compat',
-        '../handler/handler.gyp:crashpad_handler',
-        '../snapshot/snapshot.gyp:crashpad_snapshot',
-        '../test/test.gyp:crashpad_googlemock_main',
-        '../test/test.gyp:crashpad_test',
+        'client.gyp:client',
+        '../compat/compat.gyp:compat',
+        '../handler/handler.gyp:handler',
+        '../snapshot/snapshot.gyp:snapshot',
+        '../test/test.gyp:googlegmock_main',
+        '../test/test.gyp:test',
         '../third_party/googletest/googlemock.gyp:googlemock',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
@@ -50,7 +50,7 @@
       'conditions': [
         ['OS=="win"', {
           'dependencies': [
-            '../handler/handler.gyp:crashpad_handler_console',
+            '../handler/handler.gyp:handler_console',
           ],
         }],
       ],

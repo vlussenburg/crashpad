@@ -30,6 +30,7 @@
 #include "build/build_config.h"
 #include "client/crashpad_client.h"
 #include "client/crashpad_info.h"
+#include "client/simple_address_range_bag.h"
 #include "util/win/critical_section_with_debug_info.h"
 #include "util/win/get_function.h"
 

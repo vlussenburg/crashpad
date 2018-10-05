@@ -19,9 +19,6 @@
 
 #include "base/macros.h"
 #include "build/build_config.h"
-#include "client/annotation_list.h"
-#include "client/simple_address_range_bag.h"
-#include "client/simple_string_dictionary.h"
 #include "util/misc/tri_state.h"
 
 #if defined(OS_WIN)
@@ -29,6 +26,15 @@
 #endif  // OS_WIN
 
 namespace crashpad {
+
+/** 
+* Roblox: forward declaration avoid including header file with c++14 feature
+* */
+class AnnotationList;
+template <size_t> class TSimpleAddressRangeBag;
+using SimpleAddressRangeBag = TSimpleAddressRangeBag<64>;
+template <size_t, size_t, size_t> class TSimpleStringDictionary;
+using SimpleStringDictionary = TSimpleStringDictionary<256, 256, 64>;
 
 namespace internal {
 

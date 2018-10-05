@@ -18,16 +18,17 @@
   ],
   'targets': [
     {
-      'target_name': 'crashpad_minidump',
+      'target_name': 'minidump',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
-        '../compat/compat.gyp:crashpad_compat',
-        '../snapshot/snapshot.gyp:crashpad_snapshot',
+        '../compat/compat.gyp:compat',
+        '../snapshot/snapshot.gyp:snapshot',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'export_dependent_settings': [
-        '../compat/compat.gyp:crashpad_compat',
+        '../compat/compat.gyp:compat',
       ],
       'include_dirs': [
         '..',

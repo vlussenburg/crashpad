@@ -18,10 +18,11 @@
   ],
   'targets': [
     {
-      'target_name': 'crashpad_minidump_test_lib',
+      'target_name': 'minidump_test',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
-        'minidump.gyp:crashpad_minidump',
+        'minidump.gyp:minidump',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
       ],
@@ -51,14 +52,14 @@
       'target_name': 'crashpad_minidump_test',
       'type': 'executable',
       'dependencies': [
-        'crashpad_minidump_test_lib',
-        'minidump.gyp:crashpad_minidump',
-        '../snapshot/snapshot_test.gyp:crashpad_snapshot_test_lib',
-        '../test/test.gyp:crashpad_googletest_main',
-        '../test/test.gyp:crashpad_test',
+        'minidump_test',
+        'minidump.gyp:minidump',
+        '../snapshot/snapshot_test.gyp:snapshot_test',
+        '../test/test.gyp:crashpad_gtest_main',
+        '../test/test.gyp:test',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',

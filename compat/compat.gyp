@@ -18,7 +18,7 @@
   ],
   'targets': [
     {
-      'target_name': 'crashpad_compat',
+      'target_name': 'compat',
       'sources': [
         'android/android/api-level.cc',
         'android/android/api-level.h',
@@ -108,6 +108,7 @@
         }],
         ['OS=="android"', {
           'type': 'static_library',
+          'standalone_static_library': 1,
           'include_dirs': [
             'android',
             'linux',

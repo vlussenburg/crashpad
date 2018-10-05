@@ -260,6 +260,8 @@ static_library("util") {
     "thread/thread_log_messages.h",
     "thread/worker_thread.cc",
     "thread/worker_thread.h",
+    "roblox/user_callback_functions.cc",
+    "roblox/user_callback_functions.h",
   ]
 
   defines = [ "ZLIB_CONST" ]

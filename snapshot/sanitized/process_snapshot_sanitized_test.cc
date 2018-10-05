@@ -21,7 +21,9 @@
 #include "test/multiprocess_exec.h"
 #include "util/file/file_io.h"
 #include "util/misc/address_sanitizer.h"
+#include "util/misc/from_pointer_cast.h"
 #include "util/numeric/safe_assignment.h"
+#include "client/annotation.h"
 
 #if defined(OS_LINUX) || defined(OS_ANDROID)
 #include <sys/syscall.h>

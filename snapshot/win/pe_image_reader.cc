@@ -316,6 +316,7 @@ bool PEImageReader::GetCrashpadInfoSectionInternal(WinVMAddress* address,
   }
 
   process_types::CrashpadInfo<Traits> crashpad_info;
+  (void) crashpad_info; // prevent unused variable warning in VS2015
   if (section.Misc.VirtualSize <
       offsetof(process_types::CrashpadInfo<Traits>, size) +
           sizeof(crashpad_info.size)) {

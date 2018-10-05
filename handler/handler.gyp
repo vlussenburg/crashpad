@@ -20,17 +20,18 @@
     {
       # This target exists so that the crashpad_handler can be embedded into
       # another binary.
-      'target_name': 'crashpad_handler_lib',
+      'target_name': 'handler',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
-        '../client/client.gyp:crashpad_client',
-        '../compat/compat.gyp:crashpad_compat',
-        '../minidump/minidump.gyp:crashpad_minidump',
-        '../snapshot/snapshot.gyp:crashpad_snapshot',
+        '../client/client.gyp:client',
+        '../compat/compat.gyp:compat',
+        '../minidump/minidump.gyp:minidump',
+        '../snapshot/snapshot.gyp:snapshot',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
         '../third_party/zlib/zlib.gyp:zlib',
-        '../tools/tools.gyp:crashpad_tool_support',
-        '../util/util.gyp:crashpad_util',
+        '../tools/tools.gyp:tool_support',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
@@ -74,8 +75,8 @@
       'type': 'executable',
       'dependencies': [
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../tools/tools.gyp:crashpad_tool_support',
-        'crashpad_handler_lib',
+        '../tools/tools.gyp:tool_support',
+        'handler',
       ],
       'include_dirs': [
         '..',
@@ -105,7 +106,7 @@
           'type': 'none',
           'dependencies': [
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../tools/tools.gyp:crashpad_tool_support',
+            '../tools/tools.gyp:tool_support',
             'crashpad_handler',
           ],
           'actions': [

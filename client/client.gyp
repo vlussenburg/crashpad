@@ -18,13 +18,14 @@
   ],
   'targets': [
     {
-      'target_name': 'crashpad_client',
+      'target_name': 'client',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
-        '../compat/compat.gyp:crashpad_compat',
+        '../compat/compat.gyp:compat',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
         '../third_party/lss/lss.gyp:lss',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',

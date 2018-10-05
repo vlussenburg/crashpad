@@ -18,13 +18,14 @@
   ],
   'targets': [
     {
-      'target_name': 'crashpad_snapshot_test_lib',
+      'target_name': 'snapshot_test',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
-        'snapshot.gyp:crashpad_snapshot',
-        '../compat/compat.gyp:crashpad_compat',
+        'snapshot.gyp:snapshot',
+        '../compat/compat.gyp:compat',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
@@ -52,18 +53,18 @@
       'target_name': 'crashpad_snapshot_test',
       'type': 'executable',
       'dependencies': [
-        'crashpad_snapshot_test_lib',
+        'snapshot_test',
         'crashpad_snapshot_test_module',
         'crashpad_snapshot_test_module_large',
         'crashpad_snapshot_test_module_small',
-        'snapshot.gyp:crashpad_snapshot',
-        '../client/client.gyp:crashpad_client',
-        '../compat/compat.gyp:crashpad_compat',
-        '../test/test.gyp:crashpad_googletest_main',
-        '../test/test.gyp:crashpad_test',
+        'snapshot.gyp:snapshot',
+        '../client/client.gyp:client',
+        '../compat/compat.gyp:compat',
+        '../test/test.gyp:gtest_main',
+        '../test/test.gyp:test',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
@@ -164,7 +165,7 @@
       'target_name': 'crashpad_snapshot_test_module',
       'type': 'loadable_module',
       'dependencies': [
-        '../client/client.gyp:crashpad_client',
+        '../client/client.gyp:client',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
       ],
       'include_dirs': [
@@ -195,7 +196,7 @@
             'crashpad_info_size_test_note.S',
           ],
           'dependencies': [
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
         }],
       ],
@@ -221,7 +222,7 @@
             'crashpad_info_size_test_note.S',
           ],
           'dependencies': [
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
         }],
       ],
@@ -268,10 +269,10 @@
           'target_name': 'crashpad_snapshot_test_crashing_child',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
-            '../compat/compat.gyp:crashpad_compat',
+            '../client/client.gyp:client',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'sources': [
             'win/crashpad_snapshot_test_crashing_child.cc',
@@ -281,10 +282,10 @@
           'target_name': 'crashpad_snapshot_test_dump_without_crashing',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
-            '../compat/compat.gyp:crashpad_compat',
+            '../client/client.gyp:client',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'sources': [
             'win/crashpad_snapshot_test_dump_without_crashing.cc',
@@ -294,8 +295,8 @@
           'target_name': 'crashpad_snapshot_test_extra_memory_ranges',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
-            '../compat/compat.gyp:crashpad_compat',
+            '../client/client.gyp:client',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
           ],
           'sources': [
@@ -306,10 +307,10 @@
           'target_name': 'crashpad_snapshot_test_image_reader',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
-            '../compat/compat.gyp:crashpad_compat',
+            '../client/client.gyp:client',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'sources': [
             'win/crashpad_snapshot_test_image_reader.cc',
@@ -319,7 +320,7 @@
           'target_name': 'crashpad_snapshot_test_image_reader_module',
           'type': 'loadable_module',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
+            '../client/client.gyp:client',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
           ],
           'sources': [
@@ -333,8 +334,8 @@
           'target_name': 'crashpad_snapshot_test_annotations',
           'type': 'executable',
           'dependencies': [
-            '../client/client.gyp:crashpad_client',
-            '../compat/compat.gyp:crashpad_compat',
+            '../client/client.gyp:client',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
           ],
           'sources': [

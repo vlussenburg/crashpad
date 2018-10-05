@@ -18,8 +18,9 @@
   ],
   'targets': [
     {
-      'target_name': 'crashpad_tool_support',
+      'target_name': 'tool_support',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
         '../third_party/mini_chromium/mini_chromium.gyp:base',
       ],
@@ -32,14 +33,14 @@
       ],
     },
     {
-      'target_name': 'crashpad_database_util',
+      'target_name': 'database_util',
       'type': 'executable',
       'dependencies': [
-        'crashpad_tool_support',
-        '../client/client.gyp:crashpad_client',
-        '../compat/compat.gyp:crashpad_compat',
+        'tool_support',
+        '../client/client.gyp:client',
+        '../compat/compat.gyp:compat',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
@@ -49,13 +50,13 @@
       ],
     },
     {
-      'target_name': 'crashpad_http_upload',
+      'target_name': 'http_upload',
       'type': 'executable',
       'dependencies': [
-        'crashpad_tool_support',
-        '../compat/compat.gyp:crashpad_compat',
+        'tool_support',
+        '../compat/compat.gyp:compat',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
@@ -68,12 +69,12 @@
       'target_name': 'generate_dump',
       'type': 'executable',
       'dependencies': [
-        'crashpad_tool_support',
-        '../compat/compat.gyp:crashpad_compat',
-        '../minidump/minidump.gyp:crashpad_minidump',
-        '../snapshot/snapshot.gyp:crashpad_snapshot',
+        'tool_support',
+        '../compat/compat.gyp:compat',
+        '../minidump/minidump.gyp:minidump',
+        '../snapshot/snapshot.gyp:snapshot',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
@@ -128,10 +129,10 @@
           'target_name': 'catch_exception_tool',
           'type': 'executable',
           'dependencies': [
-            'crashpad_tool_support',
-            '../compat/compat.gyp:crashpad_compat',
+            'tool_support',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'include_dirs': [
             '..',
@@ -144,10 +145,10 @@
           'target_name': 'exception_port_tool',
           'type': 'executable',
           'dependencies': [
-            'crashpad_tool_support',
-            '../compat/compat.gyp:crashpad_compat',
+            'tool_support',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'include_dirs': [
             '..',
@@ -168,10 +169,10 @@
           'target_name': 'on_demand_service_tool',
           'type': 'executable',
           'dependencies': [
-            'crashpad_tool_support',
-            '../compat/compat.gyp:crashpad_compat',
+            'tool_support',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'include_dirs': [
             '..',
@@ -190,11 +191,11 @@
           'target_name': 'run_with_crashpad',
           'type': 'executable',
           'dependencies': [
-            'crashpad_tool_support',
-            '../client/client.gyp:crashpad_client',
-            '../compat/compat.gyp:crashpad_compat',
+            'tool_support',
+            '../client/client.gyp:client',
+            '../compat/compat.gyp:compat',
             '../third_party/mini_chromium/mini_chromium.gyp:base',
-            '../util/util.gyp:crashpad_util',
+            '../util/util.gyp:util',
           ],
           'include_dirs': [
             '..',

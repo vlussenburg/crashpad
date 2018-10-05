@@ -17,6 +17,7 @@
 
 #include <memory>
 #include <string>
+#include <random>
 
 #include "base/macros.h"
 #include "client/crash_report_database.h"
@@ -103,6 +104,19 @@ class CrashReportUploadThread : public WorkerThread::Delegate,
   //! It is expected to only be called from the same thread that called Start().
   void Stop() override;
 
+  //! \brief Wait pending report uploading is done before continue.
+  //! 
+  //! If necessary, call this after ReportPending() to avoid a race condition
+  //! in util/thread/worker_thread.cc:
+  //! The uploading thread blocks on semaphore and the main thread's calling 
+  //! ReportPending() posts the semaphore. If then main thread exits before
+  //! the uploading thread running, the WorkThread::Stop() will be invoked
+  //! through destructors. The Stop() method sets 'running' to false, having
+  //! the uploading thread exit immediately after wakeup without doing anything.
+  //! 
+  //! \return True as soon as report uploading is done within the timeout.
+  bool WaitForPendingUpload(int timeout_milliseconds);
+
  private:
   //! \brief The result code from UploadReport().
   enum class UploadResult {
@@ -172,6 +186,9 @@ class CrashReportUploadThread : public WorkerThread::Delegate,
   WorkerThread thread_;
   ThreadSafeVector<UUID> known_pending_report_uuids_;
   CrashReportDatabase* database_;  // weak
+  std::mt19937 rd_;
+  std::uniform_int_distribution<int> dist_;
+  volatile bool work_pending_;
 
   DISALLOW_COPY_AND_ASSIGN(CrashReportUploadThread);
 };

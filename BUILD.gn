@@ -229,6 +229,21 @@ if (crashpad_is_in_chromium || crashpad_is_in_fuchsia) {
       "util:util_test",
     ]
   }
+  
+  if (crashpad_is_mac) {
+    deps = [
+       "third_party/mini_chromium:base",
+    ]
+    action("copy_libbase_to_libchromebase") {
+      script = "build/rbx_copy_libbase.py"
+      inputs = [
+         "$root_out_dir/obj/third_party/mini_chromium/mini_chromium/base/libbase.a"
+      ]
+      outputs = [
+         "$root_out_dir/obj/third_party/mini_chromium/mini_chromium/base/libchromebase.a"
+      ]
+    }
+  }
 }
 
 if (crashpad_is_ios) {

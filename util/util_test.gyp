@@ -21,11 +21,11 @@
       'target_name': 'crashpad_util_test',
       'type': 'executable',
       'dependencies': [
-        'util.gyp:crashpad_util',
-        '../client/client.gyp:crashpad_client',
-        '../compat/compat.gyp:crashpad_compat',
-        '../test/test.gyp:crashpad_googlemock_main',
-        '../test/test.gyp:crashpad_test',
+        'util.gyp:util',
+        '../client/client.gyp:client',
+        '../compat/compat.gyp:compat',
+        '../test/test.gyp:googlemock_main',
+        '../test/test.gyp:test',
         '../third_party/googletest/googlemock.gyp:googlemock',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/lss/lss.gyp:lss',
@@ -184,8 +184,8 @@
           'dependencies': [
             '../third_party/mini_chromium/mini_chromium.gyp:base',
             '../third_party/zlib/zlib.gyp:zlib',
-            '../tools/tools.gyp:crashpad_tool_support',
-            '../util/util.gyp:crashpad_util',
+            '../tools/tools.gyp:tool_support',
+            '../util/util.gyp:util',
           ],
           'sources': [
             'net/http_transport_test_server.cc',

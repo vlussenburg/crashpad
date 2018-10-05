@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "client/crashpad_info.h"
+#include "client/annotation_list.h"
 #include "client/simple_string_dictionary.h"
 #include "snapshot/mac/mach_o_image_reader.h"
 #include "snapshot/mac/process_reader_mac.h"

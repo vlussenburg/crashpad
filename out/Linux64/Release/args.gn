@@ -1,0 +1,5 @@
+# Build arguments go here.
+# See "gn args <out_dir> --list" for available build arguments.
+target_cpu="x64"
+is_debug=false
+crashpad_use_boringssl_for_http_transport_socket=true

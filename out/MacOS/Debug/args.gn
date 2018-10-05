@@ -1,0 +1,4 @@
+# Build arguments go here.
+# See "gn args <out_dir> --list" for available build arguments.
+is_debug=true
+mac_deployment_target="10.7"

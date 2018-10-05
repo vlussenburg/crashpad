@@ -25,6 +25,7 @@
 #include "base/strings/utf_string_conversions.h"
 #include "build/build_config.h"
 #include "client/crashpad_info.h"
+#include "client/annotation_list.h"
 #include "client/simple_string_dictionary.h"
 #include "gtest/gtest.h"
 #include "snapshot/annotation_snapshot.h"

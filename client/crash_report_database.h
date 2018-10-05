@@ -71,7 +71,7 @@ class CrashReportDatabase {
     //! The current location of the crash report on the client’s filesystem.
     //! The location of a crash report may change over time, so the UUID should
     //! be used as the canonical identifier.
-    base::FilePath file_path;
+    mutable base::FilePath file_path;
 
     //! An identifier issued to this crash report by a collection server.
     std::string id;

@@ -16,6 +16,7 @@
 
 #include "base/check.h"
 #include "client/crashpad_info.h"
+#include "client/simple_address_range_bag.h"
 #include "util/file/file_io.h"
 
 

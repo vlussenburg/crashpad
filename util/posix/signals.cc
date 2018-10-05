@@ -277,6 +277,18 @@ void Signals::RestoreHandlerAndReraiseSignalOnReturn(
     _exit(kFailureExitCode);
   }
 
+
+#if defined (OS_ANDROID)
+  // android.googlesource.com/platform/art/+/master/sigchainlib/sigchain.cc
+  // Anroid runtime has a signal inteception layer of its own in libsigchain.
+  // When the deposition is SIG_DFL, it goes to abort() instead of the default
+  // handler. Since abort() generates SIGABRT, we restore its default handler
+  // to prevent our previous handler being triggered a second time.
+  if (sig != SIGABRT && !InstallDefaultHandler(SIGABRT)) {
+    _exit(kFailureExitCode);
+  }
+#endif
+
   // Explicitly re-raise the signal if it will not re-raise itself. Because
   // signal handlers normally execute with their signal blocked, this raise()
   // cannot immediately deliver the signal. Delivery is deferred until the

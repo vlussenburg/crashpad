@@ -86,6 +86,15 @@ class CrashReportExceptionHandler : public ExceptionHandlerServer::Delegate {
                        pid_t* requesting_thread_id = nullptr,
                        UUID* local_report_id = nullptr) override;
 
+#if defined(OS_LINUX)
+  bool HandleExceptionWithAdditionalTracer(
+      const base::FilePath& tracer_pathname,
+      std::vector<std::string>& tracer_args,
+      pid_t client_process_id,
+      const ExceptionHandlerProtocol::ClientInformation& info,
+      UUID* local_report_id = nullptr) override;
+#endif
+
   bool HandleExceptionWithBroker(
       pid_t client_process_id,
       uid_t client_uid,

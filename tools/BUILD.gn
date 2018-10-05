@@ -19,7 +19,7 @@ if (crashpad_is_in_chromium) {
   set_sources_assignment_filter([])
 }
 
-source_set("tool_support") {
+static_library("tool_support") {
   sources = [
     "tool_support.cc",
     "tool_support.h",

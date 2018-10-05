@@ -17,6 +17,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 namespace crashpad {
 
@@ -56,6 +57,46 @@ class ProcessSnapshot;
 std::map<std::string, std::string> BreakpadHTTPFormParametersFromMinidump(
     const ProcessSnapshot* process_snapshot);
 
-}  // namespace crashpad
+//! \brief Get the configured size limit of uploading a single file.
+//!     
+//! \returns the maximum number of bytes allowed to upload for a single
+//!          attachment, default to \a default_kbytes * 1000, 0 means
+//!          unlimited.
+int64_t CrashpadUploadAttachmentFileSizeLimit(int default_kbytes = 0);
 
+//! \brief Get the configured percentage of minidump file uploading.
+//!     
+//! \returns the configured percentage of dump files shall be uploaded to
+//!          servers, if none configured, default to \a default_percentage.
+int CrashpadUploadPercentage(int default_percentage = 10);
+
+//! \brief whether the configured uploading file format is "minidump"
+bool CrashpadUploadMiniDump();
+
+//! \brief Get annotation value as 64-bit integer
+//!
+//! \parma[in]  name  The key name.
+//! \parma[in]  defval  The value to return if key not found
+int64_t GetAnnotationInt64(const std::string& name, int64_t defval);
+
+//! \brief Get annotation value as string
+//!
+//! \parma[in]  name  The key name.
+//! \returns the value string, or empty if key not found
+std::string GetAnnotationString(const std::string& name);
+
+#if defined(OS_LINUX)
+//! \brief Form paramter array suitable for execv the backtrace ptrace tool.
+//!
+//! \parma[in]  tracer_pathname  The pathname of the tracer executable.
+//! \param[in,out] args  The string vector that holds the content.
+//! \param[out] argv  The result array of c strings for calling exec*. 
+//! \parma[in]  tracee  The ID of the process to be traced.
+//! \returns true on sucess
+bool MakeAdditionalTracerParameter(
+  std::string& tracer_pathname, std::vector<std::string>& args,
+  std::vector<const char*>& argv, pid_t tracee, const std::string& outfile);
+#endif
+
+}  // namespace crashpad
 #endif  // HANDLER_MINIDUMP_TO_UPLOAD_PARAMETERS_H_

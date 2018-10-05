@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "handler/minidump_to_upload_parameters.h"
 #include "handler/mac/crash_report_exception_handler.h"
 
 #include <utility>
@@ -39,6 +40,7 @@
 #include "util/misc/metrics.h"
 #include "util/misc/tri_state.h"
 #include "util/misc/uuid.h"
+#include "util/roblox/user_callback_functions.h"
 
 namespace crashpad {
 
@@ -102,6 +104,7 @@ kern_return_t CrashReportExceptionHandler::CatchMachException(
     return KERN_FAILURE;
   }
 
+  RunUserCallbackOnDumpEvent(nullptr);
   ScopedTaskSuspend suspend(task);
 
   ProcessSnapshotMac process_snapshot;
@@ -181,6 +184,8 @@ kern_return_t CrashReportExceptionHandler::CatchMachException(
       return KERN_FAILURE;
     }
 
+    // User callback after dump complete to access CrashpadInfo
+    RunUserCallbackAfterDump(nullptr);
     if (process_attachments_) {
       // Note that attachments are read at this point each time rather than once
       // so that if the contents of the file has changed it will be re-read for

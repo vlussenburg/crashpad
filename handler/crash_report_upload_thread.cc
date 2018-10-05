@@ -26,14 +26,17 @@
 #include "base/notreached.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
+#include "base/strings/string_number_conversions.h"
 #include "build/build_config.h"
 #include "client/settings.h"
 #include "handler/minidump_to_upload_parameters.h"
 #include "snapshot/minidump/process_snapshot_minidump.h"
 #include "snapshot/module_snapshot.h"
 #include "util/file/file_reader.h"
+#include "util/file/filesystem.h"
 #include "util/misc/metrics.h"
 #include "util/misc/uuid.h"
+#include "util/misc/clock.h"
 #include "util/net/http_body.h"
 #include "util/net/http_multipart_builder.h"
 #include "util/net/http_transport.h"
@@ -59,7 +62,9 @@ CrashReportUploadThread::CrashReportUploadThread(CrashReportDatabase* database,
                                             : WorkerThread::kIndefiniteWait,
               this),
       known_pending_report_uuids_(),
-      database_(database) {
+      database_(database), rd_((unsigned)time(0)), dist_(1,100),
+      work_pending_(false)
+{
   DCHECK(!url_.empty());
 }
 
@@ -67,7 +72,13 @@ CrashReportUploadThread::~CrashReportUploadThread() {
 }
 
 void CrashReportUploadThread::ReportPending(const UUID& report_uuid) {
+  if (((int)dist_(rd_)) > CrashpadUploadPercentage()) {
+    database_->SkipReportUpload(report_uuid,
+                                Metrics::CrashSkippedReason::kUploadThrottled);
+    return;
+  }
   known_pending_report_uuids_.PushBack(report_uuid);
+  work_pending_ = true;
   thread_.DoWorkNow();
 }
 
@@ -273,6 +284,9 @@ CrashReportUploadThread::UploadResult CrashReportUploadThread::UploadReport(
   http_multipart_builder.SetGzipEnabled(options_.upload_gzip);
 
   static constexpr char kMinidumpKey[] = "upload_file_minidump";
+#if defined(OS_LINUX)
+  static constexpr char kBacktraceKey[] = "upload_file_backtrace";
+#endif
 
   for (const auto& kv : parameters) {
     if (kv.first == kMinidumpKey) {
@@ -288,10 +302,35 @@ CrashReportUploadThread::UploadResult CrashReportUploadThread::UploadReport(
         it.first, it.first, it.second, "application/octet-stream");
   }
 
-  http_multipart_builder.SetFileAttachment(kMinidumpKey,
-                                           report->uuid.ToString() + ".dmp",
-                                           reader,
-                                           "application/octet-stream");
+  if (CrashpadUploadMiniDump()) {
+    http_multipart_builder.SetFileAttachment(kMinidumpKey,
+                                             report->uuid.ToString() + ".dmp",
+                                             reader,
+                                             "application/octet-stream");
+  } 
+#if defined(OS_LINUX)
+  else if (parameters.count("Format") && parameters["Format"] == "btt") {
+    // A hacky way to replace the report's *.dmp file with a different one.
+    base::FilePath btt_file(
+      report->file_path.RemoveFinalExtension().value() + ".btt"); 
+    reader->Close();
+    LoggingRemoveFile(report->file_path);
+    report->file_path = btt_file;
+    LOG(INFO) << "Uploading BTT file: " << btt_file.value();
+    if (!reader->Open(btt_file)) {
+      LOG(ERROR) << "Failed to open: " << btt_file.value();
+      return UploadResult::kPermanentFailure;
+    }
+    http_multipart_builder.SetFileAttachment(kBacktraceKey,
+                                             report->uuid.ToString() + ".btt",
+                                             reader,
+                                             "application/octet-stream");
+  }
+#endif
+  else {
+    LOG(ERROR) << "Unknown upload format";
+    return UploadResult::kPermanentFailure;
+  }
 
   std::unique_ptr<HTTPTransport> http_transport(HTTPTransport::Create());
   HTTPHeaders content_headers;
@@ -337,6 +376,23 @@ CrashReportUploadThread::UploadResult CrashReportUploadThread::UploadReport(
 
 void CrashReportUploadThread::DoWork(const WorkerThread* thread) {
   ProcessPendingReports();
+  work_pending_ = false;
+}
+
+bool CrashReportUploadThread::WaitForPendingUpload(int timeout_milliseconds)
+{
+  constexpr int interval = 100;
+  constexpr uint64_t nanos = (uint64_t)interval * 1000000UL;
+  while (work_pending_ && timeout_milliseconds > 0 ) {
+    SleepNanoseconds(nanos);
+    timeout_milliseconds -= interval;
+  }
+  if (work_pending_) {
+    LOG(ERROR) << "uploading report time out after " << timeout_milliseconds
+               << "milliseconds";
+    return false;
+  }
+  return true;
 }
 
 }  // namespace crashpad

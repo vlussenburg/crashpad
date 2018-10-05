@@ -18,6 +18,7 @@
 #include "client/annotation.h"
 #include "client/annotation_list.h"
 #include "client/crashpad_info.h"
+#include "client/simple_string_dictionary.h"
 #include "util/file/file_io.h"
 
 int wmain(int argc, wchar_t* argv[]) {

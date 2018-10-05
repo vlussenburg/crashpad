@@ -22,13 +22,13 @@
       'type': 'executable',
       'dependencies': [
         'crashpad_test_test_multiprocess_exec_test_child',
-        'test.gyp:crashpad_googlemock_main',
-        'test.gyp:crashpad_test',
-        '../compat/compat.gyp:crashpad_compat',
+        'test.gyp:gmock_main',
+        'test.gyp:test',
+        '../compat/compat.gyp:compat',
         '../third_party/googletest/googlemock.gyp:googlemock',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/mini_chromium/mini_chromium.gyp:base',
-        '../util/util.gyp:crashpad_util',
+        '../util/util.gyp:util',
       ],
       'include_dirs': [
         '..',
