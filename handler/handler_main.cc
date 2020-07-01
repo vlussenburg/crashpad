@@ -1031,6 +1031,7 @@ int HandlerMain(int argc,
         database.get(),
         static_cast<CrashReportUploadThread*>(upload_thread.Get()),
         &options.annotations,
+        &options.attachments,
         true,
         false,
         user_stream_sources);
