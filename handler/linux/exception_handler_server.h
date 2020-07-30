@@ -102,6 +102,7 @@ class ExceptionHandlerServer {
     //! \param[in] tracer_pathname The pathname of the tracer executable.
     //! \param[in] tracer_args Arguments for the tracer in "--opt=val" format.
     //! \param[in] client_process_id The process ID of the crashing client.
+    //! \param[in] client_uid The user ID of the crashing client.
     //! \param[in] info Information on the client.
     //! \param[out] local_report_id The unique identifier for the report created
     //!     in the local report database. Optional.
@@ -110,6 +111,7 @@ class ExceptionHandlerServer {
         const base::FilePath& tracer_pathname,
         std::vector<std::string>& tracer_args,
         pid_t client_process_id,
+        uid_t client_uid,
         const ExceptionHandlerProtocol::ClientInformation& info,
         UUID* local_report_id = nullptr) { return false; }
 

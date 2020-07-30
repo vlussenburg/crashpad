@@ -99,7 +99,7 @@ class StartHandlerForSelfTest
   DISALLOW_COPY_AND_ASSIGN(StartHandlerForSelfTest);
 };
 
-bool HandleCrashSuccessfully(int, siginfo_t*, void*) {
+bool HandleCrashSuccessfully(int, siginfo_t*, ucontext_t*) {
   return true;
 }
 

@@ -862,7 +862,7 @@ int HandlerMain(int argc,
         break;
       }
       case kOptionAdditionalTracerOpt: {
-        options.additional_tracer_opts.push_back(optarg); 
+        options.additional_tracer_opts.push_back(optarg);
         break;
       }
   #endif

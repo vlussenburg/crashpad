@@ -699,7 +699,7 @@ bool CrashpadClient::StartHandlerAtCrashForBacktrace(
   }
 
   auto signal_handler = LaunchAtCrashHandler::Get();
-  return signal_handler->Initialize(&argv, nullptr, nullptr);
+  return signal_handler->Initialize(&argv, nullptr, &unhandled_signals_);
 }
 
 #if defined(OS_CHROMEOS)
@@ -709,30 +709,5 @@ void CrashpadClient::SetCrashLoopBefore(uint64_t crash_loop_before_time) {
   request_crash_dump_handler->SetCrashLoopBefore(crash_loop_before_time);
 }
 #endif
-
-// static
-bool CrashpadClient::StartHandlerAtCrashForBacktrace(
-    const base::FilePath& handler,
-    const base::FilePath& database,
-    const base::FilePath& metrics_dir,
-    const std::string& url,
-    const std::map<std::string, std::string>& annotations,
-    const std::vector<std::string>& arguments,
-    const std::map<std::string, std::string>& fileAttachments) 
-    {
-  
-  std::vector<std::string> argv = BuildHandlerArgvStrings(
-      handler, database, metrics_dir, url, annotations, arguments);
-
-  for(const auto& fa : fileAttachments) {
-    std::stringstream str;
-    str << "--attachment=attachment_" << fa.first << "=" << fa.second;
-    argv.push_back(str.str());
-  }
-
-  auto signal_handler = LaunchAtCrashHandler::Get();
-  return signal_handler->Initialize(&argv, nullptr);
-}
-
 
 }  // namespace crashpad
