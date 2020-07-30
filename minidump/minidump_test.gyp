@@ -55,7 +55,7 @@
         'minidump_test',
         'minidump.gyp:minidump',
         '../snapshot/snapshot_test.gyp:snapshot_test',
-        '../test/test.gyp:crashpad_gtest_main',
+        '../test/test.gyp:googletest_main',
         '../test/test.gyp:test',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/mini_chromium/mini_chromium.gyp:base',

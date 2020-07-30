@@ -166,7 +166,7 @@ void Usage(const base::FilePath& me) {
 #endif  // OS_LINUX || OS_ANDROID
 "      --url=URL               send crash reports to this Breakpad server URL,\n"
 "                              only if uploads are enabled for the database\n"
-#if defined(OS_WIN) || defined(OS_FUCHSIA) || defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_MACOSX)
+#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_APPLE)
 "      --attachment=NAME=PATH  attach a copy of a file, along with a crash dump\n"
 #endif
 #if defined(OS_CHROMEOS)
@@ -253,7 +253,7 @@ bool AddKeyValueToMap(std::map<std::string, std::string>* map,
   }
   return true;
 }
-#if defined(OS_WIN) || defined(OS_FUCHSIA) || defined(OS_LINUX)
+#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_APPLE)
 // Overloaded version, to accept base::FilePath as a VALUE.
 bool AddKeyValueToMap(std::map<std::string, base::FilePath>* map,
                       const std::string& key_value,
@@ -278,7 +278,7 @@ bool AddKeyValueToMap(std::map<std::string, base::FilePath>* map,
   }
   return true;
 }
-#endif // OS_WIN || OS_FUCHSIA || OS_LINUX || OS_MACOSX
+#endif // OS_WIN || OS_LINUX || OS_APPLE
 
 // Calls Metrics::HandlerLifetimeMilestone, but only on the first call. This is
 // to prevent multiple exit events from inadvertently being recorded, which
@@ -601,9 +601,9 @@ int HandlerMain(int argc,
 #endif
     kOptionURL,
 #if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS) || \
-    defined(OS_ANDROID) || defined(OS_MACOSX)
+    defined(OS_ANDROID) || defined(OS_APPLE)
     kOptionAttachment,
-#endif // OS_WIN || OS_FUCHSIA || OS_LINUX || OS_MACOSX
+#endif // OS_WIN || OS_LINUX || OS_APPLE
 #if defined(OS_CHROMEOS)
     kOptionUseCrosCrashReporter,
     kOptionMinidumpDirForTests,
@@ -611,7 +611,7 @@ int HandlerMain(int argc,
 #endif  // OS_CHROMEOS
 #if defined(OS_ANDROID)
     kOptionWriteMinidumpToLog,
-#endif // OS_WIN || OS_FUCHSIA || OS_LINUX
+#endif  // OS_ANDROID
 
     // Standard options.
     kOptionHelp = -2,
@@ -688,9 +688,9 @@ int HandlerMain(int argc,
 #endif  // OS_LINUX || OS_ANDROID
     {"url", required_argument, nullptr, kOptionURL},
 #if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS) || \
-    defined(OS_ANDROID) || defined(OS_MACOSX)
+    defined(OS_ANDROID) || defined(OS_APPLE)
     {"attachment", required_argument, nullptr, kOptionAttachment},
-#endif // OS_WIN || OS_FUCHSIA || OS_LINUX || OS_MACOSX
+#endif // OS_WIN || OS_FUCHSIA || OS_LINUX || OS_APPLE
 #if defined(OS_CHROMEOS)
     {"use-cros-crash-reporter",
       no_argument,
@@ -872,14 +872,14 @@ int HandlerMain(int argc,
         break;
       }
 #if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS) || \
-    defined(OS_ANDROID) || defined(OS_MACOSX)
+    defined(OS_ANDROID) || defined(OS_APPLE)
       case kOptionAttachment: {
         if (!AddKeyValueToMap(&options.attachments, optarg, "--attachment")) {
           return ExitFailure();
         }
         break;
       }
-#endif // OS_WIN || OS_FUCHSIA || OS_LINUX || OS_MACOSX
+#endif // OS_WIN || OS_FUCHSIA || OS_LINUX || OS_APPLE
 #if defined(OS_CHROMEOS)
       case kOptionUseCrosCrashReporter: {
         options.use_cros_crash_reporter = true;
@@ -1071,10 +1071,10 @@ int HandlerMain(int argc,
       database.get(),
       static_cast<CrashReportUploadThread*>(upload_thread.Get()),
       &options.annotations,
-#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_MACOSX) || \
+#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_APPLE) || \
     defined(OS_ANDROID)
       &options.attachments,
-#endif // OS_WIN || OS_LINUX || OS_MACOSX || OS_ANDROID
+#endif // OS_WIN || OS_LINUX || OS_APPLE || OS_ANDROID
 #if defined(OS_ANDROID)
       options.write_minidump_to_database,
       options.write_minidump_to_log,
