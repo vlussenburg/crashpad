@@ -879,7 +879,7 @@ int HandlerMain(int argc,
         }
         break;
       }
-#endif // OS_WIN || OS_FUCHSIA || OS_LINUX || OS_APPLE
+#endif // OS_WIN || OS_LINUX || OS_CHROMEOS || OS_ANDROID || OS_APPLE
 #if defined(OS_CHROMEOS)
       case kOptionUseCrosCrashReporter: {
         options.use_cros_crash_reporter = true;
@@ -1068,9 +1068,9 @@ int HandlerMain(int argc,
   }
 #else
   exception_handler = std::make_unique<CrashReportExceptionHandler>(
-      database.get(),
-      static_cast<CrashReportUploadThread*>(upload_thread.Get()),
-      &options.annotations,
+        database.get(),
+        static_cast<CrashReportUploadThread*>(upload_thread.Get()),
+        &options.annotations,
 #if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_APPLE) || \
     defined(OS_ANDROID)
       &options.attachments,
@@ -1096,10 +1096,11 @@ int HandlerMain(int argc,
     return exception_handler->HandleExceptionWithAdditionalTracer(
         options.additional_tracer, options.additional_tracer_opts,
         getppid(), geteuid(), info) ? EXIT_SUCCESS : ExitFailure();
-#endif
+#else
     return exception_handler->HandleException(getppid(), geteuid(), info)
-	       ? EXIT_SUCCESS
-           : ExitFailure();
+               ? EXIT_SUCCESS
+               : ExitFailure();
+#endif
   }
 #endif  // OS_LINUX || OS_ANDROID
 
@@ -1183,7 +1184,7 @@ int HandlerMain(int argc,
 #if defined(OS_WIN)
   if (options.initial_client_data.IsValid()) {
     if (!exception_handler_server.InitializeWithInheritedDataForInitialClient(
-        options.initial_client_data, exception_handler.get());
+        options.initial_client_data, exception_handler.get())) {
       return EXIT_FAILURE;
     }
   }
