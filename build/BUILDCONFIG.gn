@@ -56,6 +56,17 @@ declare_args() {
   # When true, build all code with -fsanitize=fuzzer, and enable various
   # *_fuzzer targets.
   crashpad_use_libfuzzer = false
+
+# ---------- Roblox Addition Begin ----------
+  # When true, build all code with -fsanitize=address
+  crashpad_sanitize_address = false
+
+  # When true, build all code with -fsanitize=memory
+  crashpad_sanitize_memory = false
+
+  # When true links to dynamic CRT on Windows
+  msvc_dynamic_crt = false
+# ---------- Roblox Addition End ----------
 }
 
 _default_configs = [
@@ -67,6 +78,20 @@ _default_configs = [
 if (crashpad_use_libfuzzer) {
   _default_configs += [ "//build:crashpad_fuzzer_flags" ]
 }
+
+# Roblox Addition Begin
+if (crashpad_sanitize_address) {
+  _default_configs += [ "//build:crashpad_asan_flags" ]
+}
+
+if (crashpad_sanitize_memory) {
+  _default_configs += [ "//build:crashpad_msan_flags" ]
+}
+
+if (current_os == "win" && msvc_dynamic_crt) {
+  _default_configs += [ "//build:msvc_dynamic_crt_flags" ]
+}
+# Roblox Addition End
 
 _default_executable_configs = _default_configs + [
                                 "$_mini_chromium_dir/build:executable",

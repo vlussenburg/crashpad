@@ -66,3 +66,38 @@ if (crashpad_is_ios) {
     }
   }
 }
+
+# ---------- Roblox Addition Begin ----------
+config("crashpad_asan_flags") {
+  cflags = [
+    "-fsanitize=address",
+    "-fsanitize-address-use-after-scope",
+  ]
+
+  ldflags = [
+    "-fsanitize=address",
+  ]
+}
+
+config("crashpad_msan_flags") {
+  cflags = [
+    "-fsanitize=memory",
+  ]
+
+  ldflags = [
+    "-fsanitize=memory",
+  ]
+}
+
+config("msvc_dynamic_crt_flags") {
+  if (is_debug) {
+    cflags = [
+      "/MDd",
+    ]
+  } else {
+    cflags = [
+      "/MD",
+    ]
+  }
+}
+# ---------- Roblox Addition End ----------
