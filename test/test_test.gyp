@@ -22,7 +22,7 @@
       'type': 'executable',
       'dependencies': [
         'crashpad_test_test_multiprocess_exec_test_child',
-        'test.gyp:gmock_main',
+        'test.gyp:googlemock_main',
         'test.gyp:test',
         '../compat/compat.gyp:compat',
         '../third_party/googletest/googlemock.gyp:googlemock',

@@ -25,7 +25,7 @@
         '../compat/compat.gyp:compat',
         '../handler/handler.gyp:handler',
         '../snapshot/snapshot.gyp:snapshot',
-        '../test/test.gyp:googlegmock_main',
+        '../test/test.gyp:googlemock_main',
         '../test/test.gyp:test',
         '../third_party/googletest/googlemock.gyp:googlemock',
         '../third_party/googletest/googletest.gyp:googletest',

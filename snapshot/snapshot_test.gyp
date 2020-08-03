@@ -60,7 +60,7 @@
         'snapshot.gyp:snapshot',
         '../client/client.gyp:client',
         '../compat/compat.gyp:compat',
-        '../test/test.gyp:gtest_main',
+        '../test/test.gyp:googletest_main',
         '../test/test.gyp:test',
         '../third_party/googletest/googletest.gyp:googletest',
         '../third_party/mini_chromium/mini_chromium.gyp:base',

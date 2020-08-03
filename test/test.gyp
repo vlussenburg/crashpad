@@ -115,7 +115,7 @@
       ],
     },
     {
-      'target_name': 'gmock_main',
+      'target_name': 'googlemock_main',
       'type': 'static_library',
       'standalone_static_library': 1,
       'dependencies': [
