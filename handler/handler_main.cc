@@ -96,16 +96,21 @@ namespace crashpad {
 
 namespace {
 
+#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS) || \
+    defined(OS_ANDROID) || defined(OS_MACOSX)
+#define ATTACHMENTS_SUPPORTED 1
+#endif  // OS_WIN || OS_LINUX || OS_CHROMEOS || OS_ANDROID
+
 void Usage(const base::FilePath& me) {
   fprintf(stderr,
 "Usage: %" PRFilePath " [OPTION]...\n"
 "Crashpad's exception handler server.\n"
 "\n"
 "      --annotation=KEY=VALUE  set a process annotation in each crash report\n"
-#if defined(OS_WIN) || defined(OS_LINUX)
+#if defined(ATTACHMENTS_SUPPORTED)
 "      --attachment=FILE_PATH  attach specified file to each crash report\n"
 "                              at the time of the crash\n"
-#endif  // OS_WIN || OS_LINUX
+#endif  // ATTACHMENTS_SUPPORTED
 "      --database=PATH         store the crash report database at PATH\n"
 #if defined(OS_APPLE)
 "      --handshake-fd=FD       establish communication with the client over FD\n"
@@ -188,7 +193,6 @@ void Usage(const base::FilePath& me) {
 struct Options {
   std::map<std::string, std::string> annotations;
   std::map<std::string, std::string> monitor_self_annotations;
-  std::map<std::string, base::FilePath> attachments;
   std::string url;
   base::FilePath database;
   base::FilePath metrics_dir;
@@ -220,6 +224,9 @@ struct Options {
   base::FilePath minidump_dir_for_tests;
   bool always_allow_feedback = false;
 #endif  // OS_CHROMEOS
+#if defined(ATTACHMENTS_SUPPORTED)
+  std::map<std::string, base::FilePath> attachments;
+#endif  // ATTACHMENTS_SUPPORTED
 };
 
 // Splits |key_value| on '=' and inserts the resulting key and value into |map|.
@@ -606,9 +613,9 @@ int HandlerMain(int argc,
 
   static constexpr option long_options[] = {
     {"annotation", required_argument, nullptr, kOptionAnnotation},
-#if defined(OS_WIN) || defined(OS_LINUX)
+#if defined(ATTACHMENTS_SUPPORTED)
     {"attachment", required_argument, nullptr, kOptionAttachment},
-#endif  // OS_WIN || OS_LINUX
+#endif  // ATTACHMENTS_SUPPORTED
     {"database", required_argument, nullptr, kOptionDatabase},
 #if defined(OS_APPLE)
     {"handshake-fd", required_argument, nullptr, kOptionHandshakeFD},
@@ -842,14 +849,14 @@ int HandlerMain(int argc,
         options.url = optarg;
         break;
       }
-#if defined(OS_WIN) || defined(OS_FUCHSIA) || defined(OS_LINUX) || defined(OS_MACOSX)
+#if defined(ATTACHMENTS_SUPPORTED)
       case kOptionAttachment: {
         if (!AddKeyValueToMap(&options.attachments, optarg, "--attachment")) {
           return ExitFailure();
         }
         break;
       }
-#endif // OS_WIN || OS_FUCHSIA || OS_LINUX || OS_MACOSX
+#endif // ATTACHMENTS_SUPPORTED
 #if defined(OS_CHROMEOS)
       case kOptionUseCrosCrashReporter: {
         options.use_cros_crash_reporter = true;
@@ -1041,9 +1048,9 @@ int HandlerMain(int argc,
       database.get(),
       static_cast<CrashReportUploadThread*>(upload_thread.Get()),
       &options.annotations,
-#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_MACOSX)
+#if defined(ATTACHMENTS_SUPPORTED)
       &options.attachments,
-#endif // OS_WIN || OS_LINUX || OS_MACOSX
+#endif  // ATTACHMENTS_SUPPORTED
 #if defined(OS_ANDROID)
       options.write_minidump_to_database,
       options.write_minidump_to_log,
