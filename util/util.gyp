@@ -421,6 +421,36 @@
               '-llog',
             ],
           },
+          'defines' : [
+            'CRASHPAD_USE_BORINGSSL',
+          ],
+          # Roblox specific location of openssl for different target_arch
+          'conditions': [
+            [ 'target_arch=="arm"', {
+              'link_settings': {
+                'libraries': [
+                  '<!(pwd)/../../../openssl/android/arm/lib/libssl.a',
+                  '<!(pwd)/../../../openssl/android/arm/lib/libcrypto.a',
+                ],
+              },
+            }],
+            [ 'target_arch=="arm64"', {
+              'link_settings': {
+                'libraries': [
+                  '<!(pwd)/../../../openssl/android/arm64/lib/libssl.a',
+                  '<!(pwd)/../../../openssl/android/arm64/lib/libcrypto.a',
+                ],
+              },
+            }],
+            [ 'target_arch=="x64"', {
+              'link_settings': {
+                'libraries': [
+                  '<!(pwd)/../../../openssl/android/x86_64/lib/libssl.a',
+                  '<!(pwd)/../../../openssl/android/x86_64/lib/libcrypto.a',
+                ],
+              },
+            }],
+          ],
         }],
         ['OS=="linux" or OS=="android"', {
           'sources': [
@@ -432,21 +462,6 @@
           'sources!': [
             'misc/capture_context_linux.S',
           ],
-        }],
-        ['OS=="android"', {
-          'defines' : [
-            'CRASHPAD_USE_BORINGSSL',
-          ],
-          'link_settings': {
-            # Roblox specific location of openssl, need rerun build/gyp_crashpad_android.py
-            # to generate makefiles when switch between building 32-bit and 64-bit for ARM.
-            'libraries': [
-              #'<!(pwd)/../../../openssl/android/arm/lib/libssl.a',
-              #'<!(pwd)/../../../openssl/android/arm/lib/libcrypto.a',
-              '<!(pwd)/../../../openssl/android/arm64/lib/libssl.a',
-              '<!(pwd)/../../../openssl/android/arm64/lib/libcrypto.a',
-            ],
-          },
         }],
         ['OS!="linux" and OS!="android"', {
           'sources/': [
