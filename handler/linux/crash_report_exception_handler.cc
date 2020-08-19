@@ -150,7 +150,6 @@ bool CrashReportExceptionHandler::HandleExceptionWithConnection(
     return false;
   }
 
-  RunUserCallbackOnDumpEvent(nullptr);
   UUID client_id;
   Settings* const settings = database_->GetSettings();
   if (settings) {
@@ -194,6 +193,9 @@ bool CrashReportExceptionHandler::WriteMinidumpToDatabase(
   MinidumpFileWriter minidump;
   minidump.InitializeFromSnapshot(snapshot);
   AddUserExtensionStreams(user_stream_data_sources_, snapshot, &minidump);
+
+  // CrashpadInfo ready to use after minidump created from the snapshot
+  RunUserCallbackOnDumpEvent(CrashpadInfo::GetCrashpadInfo());
 
   if (!minidump.WriteEverything(new_report->Writer())) {
     LOG(ERROR) << "WriteEverything failed";
