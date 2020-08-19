@@ -209,7 +209,12 @@ class CrashpadClient {
   //!     specified in this parameter.
   //!
   //! \return `true` on success, `false` on failure with a message logged.
-  bool StartJavaHandlerAtCrash(
+
+  //TODO: REMOVE "static" once crashpad binaries are upgraded for Android.
+  // The new code changed this to a member function. Right now because Roblox
+  // Android App links with the old binaries, must retain the old declaration
+  // in this header file, or Android crashpad would break.
+  static bool StartJavaHandlerAtCrash(
       const std::string& class_name,
       const std::vector<std::string>* env,
       const base::FilePath& database,
