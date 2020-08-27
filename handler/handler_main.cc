@@ -1164,7 +1164,10 @@ int HandlerMain(int argc,
   if (!options.pipe_name.empty()) {
     exception_handler_server.SetPipeName(base::UTF8ToUTF16(options.pipe_name));
   }
-#elif defined(OS_LINUX) || defined(OS_ANDROID)
+#elif defined(OS_LINUX)
+  ExceptionHandlerServer exception_handler_server(
+    options.additional_tracer, options.additional_tracer_opts);
+#elif defined(OS_ANDROID)
   ExceptionHandlerServer exception_handler_server;
 #endif  // OS_APPLE
 

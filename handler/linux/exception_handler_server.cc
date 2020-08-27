@@ -236,13 +236,18 @@ class PtraceStrategyDeciderImpl : public PtraceStrategyDecider {
 
 }  // namespace
 
-ExceptionHandlerServer::ExceptionHandlerServer()
-    : clients_(),
-      shutdown_event_(),
-      strategy_decider_(new PtraceStrategyDeciderImpl()),
-      delegate_(nullptr),
-      pollfd_(),
-      keep_running_(true) {}
+ExceptionHandlerServer::ExceptionHandlerServer(
+    const base::FilePath&           additional_tracer,
+    const std::vector<std::string>& additional_tracer_opts
+) : clients_(),
+    shutdown_event_(),
+    strategy_decider_(new PtraceStrategyDeciderImpl()),
+    delegate_(nullptr),
+    pollfd_(),
+    keep_running_(true),
+    additional_tracer_(additional_tracer),
+    additional_tracer_opts_(additional_tracer_opts)
+{}
 
 ExceptionHandlerServer::~ExceptionHandlerServer() = default;
 
@@ -466,11 +471,26 @@ bool ExceptionHandlerServer::HandleCrashDumpRequest(
               kTypeCrashDumpFailed);
 
     case PtraceStrategyDecider::Strategy::kDirectPtrace: {
-      delegate_->HandleException(client_process_id,
-                                 client_uid,
-                                 client_info,
-                                 requesting_thread_stack_address,
-                                 &requesting_thread_id);
+      if (additional_tracer_.empty()) {
+        LOG(INFO) << "Handle exception without additional tracer";
+        delegate_->HandleException(
+            client_process_id,
+            client_uid,
+            client_info,
+            requesting_thread_stack_address,
+            &requesting_thread_id);
+      } else {
+        LOG(INFO) << "Handle exception with additional tracer "
+                  << additional_tracer_.value();
+        delegate_->HandleExceptionWithAdditionalTracer(
+            additional_tracer_,
+            additional_tracer_opts_,
+            client_process_id,
+            client_uid,
+            client_info,
+            requesting_thread_stack_address,
+            &requesting_thread_id);
+      }
       if (multiple_clients) {
         SendSIGCONT(client_process_id, requesting_thread_id);
         return true;

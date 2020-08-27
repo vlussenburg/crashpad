@@ -286,9 +286,12 @@ bool CrashReportExceptionHandler::HandleExceptionWithAdditionalTracer(
     pid_t client_process_id,
     uid_t client_uid,
     const ExceptionHandlerProtocol::ClientInformation& info,
+    VMAddress requesting_thread_stack_address,
+    pid_t* requesting_thread_id,
     UUID* local_report_id) {
   UUID report_uuid;
-  if (!HandleException(client_process_id, client_uid, info, 0, nullptr, &report_uuid)) {
+  if (!HandleException(client_process_id, client_uid, info,
+      requesting_thread_stack_address, requesting_thread_id, &report_uuid)) {
     return false;
   }
   if (local_report_id) {
@@ -297,9 +300,10 @@ bool CrashReportExceptionHandler::HandleExceptionWithAdditionalTracer(
   LOG(INFO) << "Crashpad generated report: " << report_uuid.ToString();
 
   if (CrashpadUploadMiniDump()) {
-    LOG(INFO) << "Skip additional tracer, whose format is not minidump";
+    LOG(INFO) << "Skip additional tracer, upload minidump";
     return true;
   }
+  DCHECK(!tracer_pathname.empty());
 
   CrashReportDatabase::Report report;
   if (database_->LookUpCrashReport(report_uuid, &report) !=
@@ -308,7 +312,8 @@ bool CrashReportExceptionHandler::HandleExceptionWithAdditionalTracer(
     return false;
   }
 
-  std::string fn = report.file_path.RemoveFinalExtension().value() + ".btt";
+  std::string fn = report.file_path.RemoveFinalExtension().value()
+                 + "." + GetAnnotationString("Format");
   std::string tracer(tracer_pathname.value());
   std::vector<const char*> argv;
   if (!MakeAdditionalTracerParameter(

@@ -93,6 +93,8 @@ class CrashReportExceptionHandler : public ExceptionHandlerServer::Delegate {
       pid_t client_process_id,
       uid_t client_uid,
       const ExceptionHandlerProtocol::ClientInformation& info,
+      VMAddress requesting_thread_stack_address = 0,
+      pid_t* requesting_thread_id = nullptr,
       UUID* local_report_id = nullptr) override;
 #endif
 

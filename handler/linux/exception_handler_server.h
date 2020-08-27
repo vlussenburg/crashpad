@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "base/macros.h"
+#include "base/files/file_path.h"
 #include "util/file/file_io.h"
 #include "util/linux/exception_handler_protocol.h"
 #include "util/misc/address_types.h"
@@ -113,6 +114,8 @@ class ExceptionHandlerServer {
         pid_t client_process_id,
         uid_t client_uid,
         const ExceptionHandlerProtocol::ClientInformation& info,
+        VMAddress requesting_thread_stack_address = 0,
+        pid_t* requesting_thread_id = nullptr,
         UUID* local_report_id = nullptr) { return false; }
 
     //! \brief Called on the receipt of a crash dump request from a client for a
@@ -135,7 +138,10 @@ class ExceptionHandlerServer {
     virtual ~Delegate() {}
   };
 
-  ExceptionHandlerServer();
+  ExceptionHandlerServer(
+      const base::FilePath&           additional_tracer = {},
+      const std::vector<std::string>& additional_tracer_opts = {}
+  );
   ~ExceptionHandlerServer();
 
   //! \brief Sets the handler's PtraceStrategyDecider.
@@ -207,6 +213,9 @@ class ExceptionHandlerServer {
   ScopedFileHandle pollfd_;
   std::atomic<bool> keep_running_;
   InitializationStateDcheck initialized_;
+
+  base::FilePath additional_tracer_;
+  std::vector<std::string> additional_tracer_opts_;
 
   DISALLOW_COPY_AND_ASSIGN(ExceptionHandlerServer);
 };
