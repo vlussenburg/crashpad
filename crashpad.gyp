@@ -23,6 +23,7 @@
         'compat/compat.gyp:*',
         'handler/handler.gyp:*',
         'handler/handler_test.gyp:*',
+        'handler/linux/trampoline.gyp:*',
         'minidump/minidump.gyp:*',
         'minidump/minidump_test.gyp:*',
         'snapshot/snapshot.gyp:*',

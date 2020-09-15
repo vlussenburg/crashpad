@@ -20,7 +20,7 @@
 // exporting the symbol `CrashpadHandlerMain`. The remaining arguments are the
 // same as for `HandlerMain()`.
 int main(int argc, char* argv[]) {
-  static constexpr char kTag[] = "crashpad";
+  static constexpr char kTag[] = "crashpad_trampoline";
 
   if (argc < 2) {
     __android_log_print(ANDROID_LOG_FATAL, kTag, "usage: %s <path>", argv[0]);
