@@ -89,9 +89,7 @@ std::vector<std::string> BuildAppProcessArgs(
     handler_argv.push_back(FormatArgumentInt("initial-client-fd", socket));
   }
 
-  // upstream commit c87486f59 removed the "+1", caused wrong arguments
-  // sent to the handler_main, break the using of StartJavaHandlerAtCrash
-  argv.insert(argv.end(), handler_argv.begin() + 1, handler_argv.end());
+  argv.insert(argv.end(), handler_argv.begin(), handler_argv.end());
   return argv;
 }
 
