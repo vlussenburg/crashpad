@@ -117,6 +117,8 @@ StartupState BlockUntilHandlerStartedOrFailed() {
 extern "C" LONG __asan_unhandled_exception_filter(EXCEPTION_POINTERS* info);
 #endif
 
+bool backtrace_io_ignore_next_crash;
+
 LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exception_pointers) {
 #if defined(ADDRESS_SANITIZER)
   // In ASan builds, delegate to the ASan exception filter.
@@ -124,6 +126,11 @@ LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exception_pointers) {
   if (status != EXCEPTION_CONTINUE_SEARCH)
     return status;
 #endif
+
+  if (backtrace_io_ignore_next_crash) {
+    backtrace_io_ignore_next_crash = false;
+    return EXCEPTION_CONTINUE_SEARCH;
+  }
 
   if (BlockUntilHandlerStartedOrFailed() == StartupState::kFailed) {
     // If we know for certain that the handler has failed to start, then abort
@@ -594,6 +601,11 @@ void RegisterHandlers() {
 }
 
 }  // namespace
+
+void SetBacktraceIoIgnoreNextCrash(bool value)
+{
+  backtrace_io_ignore_next_crash = value;
+}
 
 CrashpadClient::CrashpadClient() : ipc_pipe_(), handler_start_thread_() {}
 
