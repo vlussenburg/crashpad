@@ -1,0 +1,4 @@
+project: PROJECT 
+target: Crashpad-Handler 
+cmds:
+- cmd: /handler
