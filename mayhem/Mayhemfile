@@ -1,4 +1,8 @@
-project: PROJECT 
-target: Crashpad-Handler 
+project: mylabs/Crashpad
+target: Crashpad 
 cmds:
-- cmd: /handler
+# args: url handler_path database_path
+- cmd: /demo_linux http://localhost/universe/project/abcdef123456789 /handler /
+network:
+    url: tcp://localhost:80
+    client: true
