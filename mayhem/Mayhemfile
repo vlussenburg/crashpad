@@ -5,6 +5,7 @@ version: '2.0'
 cmds:
 # args: url handler_path database_path
     - cmd: /demo_linux http://127.0.0.1/ /handler /
+      env: { "__MFUZZ_PROG_MATCH": "handler" }
       network:
         client: true
         url: tcp://127.0.0.1:80
