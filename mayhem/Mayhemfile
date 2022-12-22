@@ -1,8 +1,10 @@
-project: mylabs/Crashpad
-target: Crashpad
+#project: mylabs/crashpad
+target: crashpad
+version: '2.0'
+
 cmds:
 # args: url handler_path database_path
-- cmd: /demo_linux http://localhost/universe/project/abcdef123456789 /handler /
-    network:
-        url: tcp://localhost:80
+    - cmd: /demo_linux http://localhost/universe/project/abcdef123456789 /handler /
+      network:
         client: true
+        url: tcp://localhost:80
