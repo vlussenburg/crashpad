@@ -1,4 +1,4 @@
-#project: mylabs/crashpad
+project: vincent/crashpad
 target: crashpad
 version: '2.0'
 
