@@ -4,7 +4,7 @@ version: '2.0'
 
 cmds:
 # args: url handler_path database_path
-    - cmd: /demo_linux http://localhost/universe/project/abcdef123456789 /handler /
+    - cmd: /demo_linux http://127.0.0.1/ /handler /
       network:
         client: true
-        url: tcp://localhost:80
+        url: tcp://127.0.0.1:80
